@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sites.mapper.SiteMapper">
+    <resultMap id="SiteInfoMap" type="com.sites.entity.Site">
+        <result property="siteName" column="site_name" />
+        <result property="siteId" column="site_id" />
+        <result property="siteIcon" column="site_icon" />
+        <result property="siteVerify" column="site_verify" />
+        <result property="siteVerify" column="site_verify" />
+        <result property="version" column="version" />
+        <result property="gmtCreate" column="gmt_create"/>
+        <result property="gmtModified" column="gm_modified"/>
+        <result property="masterId" column="master_id"/>
+        <association property="master" column="master_id" select="queryUserInfo" />
+        <association property="messageVOList" column="message_vo_list_id" select="queryMessageList" />
+    </resultMap>
+
+    <!--留言list map-->
+    <resultMap id="messageVoListMap" type="com.sites.entity.model.site.MessageVOList">
+        <result property="messageVoListId" column="message_vo_list_id" />
+        <result property="siteId" column="site_id" />
+        <collection property="messages" javaType="ArrayList" select="queryMessageInfo" column="message_vo_list_id"/>
+    </resultMap>
+
+    <!--留言列表-->
+    <select id="queryMessageList" resultMap="messageVoListMap">
+        select * from site_message_list where message_vo_list_id=#{message_vo_list_id}
+    </select>
+
+    <!--留言数据-->
+    <select id="queryMessageInfo" resultMap="messageVotMap">
+        select * from site_message_vo where message_vo_list_id=#{message_vo_list_id}
+    </select>
+
+    <!--用户模型Map-->
+    <resultMap id="UserResultMap" type="com.sites.entity.User">
+        <result property="name" column="name" />
+        <result property="avatar" column="avatar" />
+        <result property="gmtCreate" column="gmt_create"/>
+        <result property="gmtModified" column="gm_modified"/>
+    </resultMap>
+
+    <!--留言内容，包含用户信息map-->
+    <resultMap id="messageVotMap" type="com.sites.entity.model.site.MessageVO">
+        <result property="messageVoListId" column="message_vo_list_id" />
+        <result property="siteId" column="site_id" />
+        <result property="toUserId" column="to_user_id" />
+        <result property="fromUserId" column="from_user_id" />
+        <result property="messageDate" column="message_date" />
+        <association property="fromUserVO" select="queryPureUser" column="from_user_id"/>
+        <association property="toUserVO" select="queryPureUser" column="to_user_id"/>
+    </resultMap>
+    <select id="queryMessageInfo" resultType="com.sites.entity.model.site.MessageVO">
+        select * from site_message_vo where message_vo_list_id=#{message_vo_list_id}
+    </select>
+
+    <!--查询用户信息不包含站点信息-->
+    <select id="queryPureUser" resultMap="UserResultMap">
+        select name,avatar,user_id from user where user_id=#{user_id}
+    </select>
+
+
+<!--查询用户信息-->
+    <select id="queryUserInfo" resultType="com.sites.entity.User">
+        select * from user where user_id=#{user_id}
+    </select>
+
+    <select id="querySiteInfo" resultMap="SiteInfoMap">
+    select * from site where site_id=#{siteId}
+    </select>
+</mapper>

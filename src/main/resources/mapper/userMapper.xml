@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sites.mapper.UserMapper">
+    <resultMap id="userInfoMap" type="com.sites.entity.User">
+        <result property="name" column="name" />
+        <result property="version" column="version" />
+        <result property="setting"
+                column="setting"
+                typeHandler="com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler"
+        />
+        <result property="gmtCreate" column="gmt_create"/>
+        <result property="gmtModified" column="gm_modified"/>
+        <collection property="mySites" javaType="ArrayList" select="queryMySites" column="user_id"/>
+    </resultMap>
+<!--查询用户的生活类站点-->
+    <select id="querySiteInfoByUserId" resultType="com.sites.entity.Site">
+         select * from site where master_id=#{user_id}
+    </select>
+
+<!--    查询用户的所有站点-->
+        <select id="queryMySites" resultMap="SiteBaseInfoMap">
+             select * from site where site.master_id=#{userId}
+        </select>
+<resultMap id="JSONObject" type="com.sites.common.AnyModel">
+    <result property="siteId"
+            column="site_id"
+            typeHandler="com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler"
+    />
+</resultMap>
+    <select id="queryUserInfo" resultMap="userInfoMap">
+        select * from user where user_id=#{user_id}
+    </select>
+
+<!--  用户模型 -->
+    <resultMap id="UserResultMap" type="com.sites.entity.User">
+        <result property="name" column="name" />
+        <result property="version" column="version" />
+        <result property="setting"
+                column="setting"
+                typeHandler="com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler"
+        />
+        <result property="gmtCreate" column="gmt_create"/>
+        <result property="gmtModified" column="gm_modified"/>
+    </resultMap>
+
+<!-- 站点map - base-->
+    <resultMap id="SiteBaseInfoMap" type="com.sites.entity.Site">
+        <result property="siteName" column="site_name" />
+        <result property="siteId" column="site_id" />
+        <result property="siteIcon" column="site_icon" />
+        <result property="siteVerify" column="site_verify" />
+        <result property="siteType" column="site_type" />
+        <result property="version" column="version" />
+        <result property="gmtCreate" column="gmt_create"/>
+        <result property="gmtModified" column="gm_modified"/>
+        <result property="masterId" column="master_id"/>
+    </resultMap>
+
+    <select id="querySiteInfoBySiteId" resultType="com.sites.entity.Site">
+         select * from site where site_id=#{site_id}
+    </select>
+</mapper>
