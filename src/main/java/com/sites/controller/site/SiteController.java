@@ -1,5 +1,7 @@
 package com.sites.controller.site;
 
+import com.sites.common.BizException;
+import com.sites.common.CommonResponse;
 import com.sites.entity.Site;
 import com.sites.service.SiteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +17,11 @@ public class SiteController {
 
     @GetMapping("/site-info/{siteId}")
     @ResponseBody
-    public Site querySiteInfo(@PathVariable String siteId) {
-        Site stringObjectHashMap = siteService.querySiteInfo(siteId);
-        System.out.println(stringObjectHashMap);
-        return stringObjectHashMap;
+    public CommonResponse querySiteInfo(@PathVariable String siteId) {
+        if (siteId == null) {
+            throw new BizException("站点id不能为空", "EMPTY_SITE_ID");
+        }
+        Site site = siteService.querySiteInfo(siteId);
+        return CommonResponse.success(site);
     }
 }

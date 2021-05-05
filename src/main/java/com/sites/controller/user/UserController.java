@@ -1,31 +1,33 @@
 package com.sites.controller.user;
 
-import com.sites.entity.User;
+import com.sites.common.BizException;
+import com.sites.common.CommonResponse;
 import com.sites.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.List;
 
-@Controller
+@RestController
 public class UserController {
 
     @Autowired
     UserService userService;
 
     @GetMapping("/user/{id}")
-    @ResponseBody
-    public User queryUserById(@PathVariable String id) {
-        return userService.queryUserInfo(id);
+    public CommonResponse queryUserById(@PathVariable String id) {
+        if (id == null) {
+            throw new BizException("用户id不能为空", "-1");
+        }
+        return CommonResponse.success(userService.queryUserInfo(id));
     }
 
     @GetMapping("/my-sites/{id}")
-    @ResponseBody
-    public List queryMySites(@PathVariable String id) {
-        return userService.queryMySites(id);
+    public CommonResponse queryMySites(@PathVariable String id) {
+        if (id == null) {
+            throw new BizException("用户id不能为空", "-1");
+        }
+        return CommonResponse.success(userService.queryMySites(id));
     }
 }

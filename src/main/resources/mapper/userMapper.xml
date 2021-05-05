@@ -21,12 +21,6 @@
         <select id="queryMySites" resultMap="SiteBaseInfoMap">
              select * from site where site.master_id=#{userId}
         </select>
-<resultMap id="JSONObject" type="com.sites.common.AnyModel">
-    <result property="siteId"
-            column="site_id"
-            typeHandler="com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler"
-    />
-</resultMap>
     <select id="queryUserInfo" resultMap="userInfoMap">
         select * from user where user_id=#{user_id}
     </select>
