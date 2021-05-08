@@ -11,13 +11,23 @@
         <result property="gmtCreate" column="gmt_create"/>
         <result property="gmtModified" column="gm_modified"/>
         <collection property="mySites" javaType="ArrayList" select="queryMySites" column="user_id"/>
+        <collection property="myFavorites" javaType="ArrayList" select="queryMyFavorites" column="user_id"/>
     </resultMap>
-<!--查询用户的生活类站点-->
+
+<!--查询用户的收藏-->
+    <select id="queryMyFavorites" resultMap="myFavoriteMap">
+        select * from favorites_list where user_id=#{user_id}
+    </select>
+    <resultMap id="myFavoriteMap" type="com.sites.entity.MyFavorites">
+        <collection property="siteIdList" javaType="ArrayList" select="queryMyFavorites" column="site_id_list"/>
+    </resultMap>
+
+<!--查询用户站点-->
     <select id="querySiteInfoByUserId" resultType="com.sites.entity.Site">
          select * from site where master_id=#{user_id}
     </select>
 
-<!--    查询用户的所有站点-->
+<!--查询用户的所有站点-->
         <select id="queryMySites" resultMap="SiteBaseInfoMap">
              select * from site where site.master_id=#{userId}
         </select>
@@ -25,7 +35,7 @@
         select * from user where user_id=#{user_id}
     </select>
 
-<!--  用户模型 -->
+<!-- 用户模型 -->
     <resultMap id="UserResultMap" type="com.sites.entity.User">
         <result property="name" column="name" />
         <result property="version" column="version" />
@@ -37,7 +47,7 @@
         <result property="gmtModified" column="gm_modified"/>
     </resultMap>
 
-<!-- 站点map - base-->
+<!--站点map-base-->
     <resultMap id="SiteBaseInfoMap" type="com.sites.entity.Site">
         <result property="siteName" column="site_name" />
         <result property="siteId" column="site_id" />

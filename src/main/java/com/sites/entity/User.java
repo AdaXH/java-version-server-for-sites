@@ -60,7 +60,7 @@ public class User {
     /**
      * qq登录用户uId
      */
-    private String unionid;
+    private String unionId;
     /**
      * qq登录的用户唯一标识
      */
@@ -82,6 +82,12 @@ public class User {
     @TableField(exist = false, typeHandler = FastjsonTypeHandler.class)
     private List<Site> mySites = new ArrayList<>();
 
+    /**
+     * 用户收藏列表
+     */
+    @TableField(exist = false, typeHandler = FastjsonTypeHandler.class)
+    private List<Site> myFavorites = new ArrayList<>();
+
     @Version
     private Integer version;
 
@@ -89,12 +95,8 @@ public class User {
         return userId;
     }
 
-    public List getMySites() {
+    public List<Site> getMySites() {
         return mySites;
-    }
-
-    public void setMySites(List mySites) {
-        this.mySites = mySites;
     }
 
     public void setUserId(String userId) {
@@ -165,12 +167,16 @@ public class User {
         this.myDesc = myDesc;
     }
 
-    public String getUnionid() {
-        return unionid;
+    public String getUnionId() {
+        return unionId;
     }
 
-    public void setUnionid(String unionid) {
-        this.unionid = unionid;
+    public void setUnionId(String unionId) {
+        this.unionId = unionId;
+    }
+
+    public void setMySites(List<Site> mySites) {
+        this.mySites = mySites;
     }
 
     public String getQqUserId() {
